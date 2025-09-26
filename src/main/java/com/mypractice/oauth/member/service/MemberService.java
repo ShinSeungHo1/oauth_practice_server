@@ -5,6 +5,7 @@ import com.mypractice.oauth.member.dto.MemberCreateDto;
 import com.mypractice.oauth.member.dto.MemberLoginDto;
 import com.mypractice.oauth.member.repository.MemberRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +36,8 @@ public class MemberService {
     }
 
     public Member login(MemberLoginDto memberLoginDto) {
-        Optional<Member> optMember =  memberRepository.findByEmail(memberLoginDto.getEmail());  //Optional 객체로 리턴(우리가 정의해주기 나름임) => Member 객체가 있을수도 있고 없을 수도 있다.
+        Optional<Member> optMember =  memberRepository.findByEmail(memberLoginDto.getEmail());
+        //Optional 객체로 리턴(우리가 정의해주기 나름임) => Member 객체가 있을수도 있고 없을 수도 있다.
 
         if(!optMember.isPresent()) {
             throw new IllegalArgumentException("email이 존재하지 않습니다.");
@@ -45,7 +47,6 @@ public class MemberService {
         if(!passwordEncoder.matches(memberLoginDto.getPassword(), member.getPassword())) {
             throw new IllegalArgumentException("password가 일치 하지 않습니다.");
         }
-
         return member;
     }
 }
