@@ -18,3 +18,9 @@ jwt:
   # 32?? ???? ?? ??? ??????.
   secret: b2F1dGhzZXJ2ZXJzZWNyZXRhY2Nlc3N0b2tlbm9hdXRoc2VydmVyc2VjcmV0YWNjZXNzdG9rZW5vYXV0aHNlcnZlcnNlY3JldGFjY2Vzc3Rva2Vub2F1dGhzZXJ2ZXJzZWNyZXRhY2Nlc3N0b2tlbg==
   expiration: 3000 # ?? ?? ??? ??... refresh token? ?? ?? ?? ?? ?... ?? test ???? ? ?? ???!
+
+oauth:
+  google:
+    client-id: 23640695977-gtrcdkhuv1as8fn0jie882lc5f05cjbp.apps.googleusercontent.com
+    client-secret: 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
+    redirect-uri: http://localhost:3000/oauth/google/redirect
