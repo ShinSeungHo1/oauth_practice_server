@@ -1,6 +1,7 @@
 package com.mypractice.oauth.member.service;
 
 import com.mypractice.oauth.member.domain.Member;
+import com.mypractice.oauth.member.domain.SocialType;
 import com.mypractice.oauth.member.dto.MemberCreateDto;
 import com.mypractice.oauth.member.dto.MemberLoginDto;
 import com.mypractice.oauth.member.repository.MemberRepository;
@@ -39,7 +40,7 @@ public class MemberService {
         Optional<Member> optMember =  memberRepository.findByEmail(memberLoginDto.getEmail());
         //Optional 객체로 리턴(우리가 정의해주기 나름임) => Member 객체가 있을수도 있고 없을 수도 있다.
 
-        if(!optMember.isPresent()) {
+        if(optMember.isEmpty()) {
             throw new IllegalArgumentException("email이 존재하지 않습니다.");
         }
 
@@ -47,6 +48,22 @@ public class MemberService {
         if(!passwordEncoder.matches(memberLoginDto.getPassword(), member.getPassword())) {
             throw new IllegalArgumentException("password가 일치 하지 않습니다.");
         }
+        return member;
+    }
+
+    public Member getMemberBySocialId(String socialId) {
+        Member member = memberRepository.findBySocialId(socialId).orElse(null);
+        return member;
+    }
+
+    public Member createOauth(String socialId, String email, SocialType socialType) {
+        Member member = Member.builder()
+                .email(email)
+                .socialType(socialType)
+                .socialId(socialId)
+                .build();
+
+        memberRepository.save(member);
         return member;
     }
 }

@@ -47,7 +47,7 @@ public class SecurityConfig {
                 // 검증에서 성공하고 나면 서버의 메모리에 authentication 객체를 만들어 줄것이다.
                 // 그러면 spring security 의존성에서 authentication객체가 만들어 진것을 확인하고 로그인 성공했다고 판단한다.
                 // 어찌 됐든 지금 아래 authorizeHttpRequest => 요놈은 해당 애들은 authentication 객체가 없더라도 API허용
-                .authorizeHttpRequests(a -> a.requestMatchers("/member/create", "/member/doLogin").permitAll().anyRequest().authenticated())
+                .authorizeHttpRequests(a -> a.requestMatchers("/member/create", "/member/doLogin", "/member/google/doLogin", "/member/kakao/doLogin").permitAll().anyRequest().authenticated())
                 // UsernamePasswordAuthenticationFilter 에서 form login 인증을 처리 근데 이건 mvc pattern에서 쓰는 spring에서 제공하는 로그인화면
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
