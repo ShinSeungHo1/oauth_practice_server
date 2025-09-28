@@ -1,6 +1,9 @@
 package com.mypractice.oauth.member.service;
 
 import com.mypractice.oauth.member.dto.AccessTokenDto;
+import com.mypractice.oauth.member.dto.KakaoProfileDto;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -9,17 +12,40 @@ import org.springframework.web.client.RestClient;
 @Service
 public class KakaoService {
 
+    @Value("${oauth.kakao.client-id}")
+    private String kakaoClientId;
+
+    @Value("${oauth.kakao.redirect-uri}")
+    private String kakaoRedirectUri;
 
 
     public AccessTokenDto getAccessToken(String code) {
-        //서버간 통신을 위하여 RestClient 객체 사용
-        // 필용한 정보 : ContentType, 인가 코드, redirect uri, client_secret, client_id, grant_type
         RestClient restClient = RestClient.create();
-
-        //MultiValueMap을 통해 form-data 형식으로 body 조합하기
-        // 왜냐 원하는 content-type이 form 형태이기 때문
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("code", code);
+        params.add("client_id", kakaoClientId);
+        params.add("redirect_uri", kakaoRedirectUri);
+        params.add("grant_type", "authorization_code");
 
-        params.add("code");
+        ResponseEntity<AccessTokenDto> response = restClient.post()
+                .uri("https://kauth.kakao.com/oauth/token")
+                .header("Content-Type", "application/x-www-form-urlencoded")
+                .body(params)
+                .retrieve()
+                .toEntity(AccessTokenDto.class);
+
+        System.out.println("kakao access token 응답 JSON : " + response.getBody());
+        return response.getBody();
+    }
+
+    public KakaoProfileDto getKakaoProfile(String token) {
+        RestClient restClient = RestClient.create();
+        ResponseEntity<KakaoProfileDto> response = restClient.get()
+                .uri("https://kapi.kakao.com/v2/user/me")
+                .header("Authorization", "Bearer " + token)
+                .retrieve()
+                .toEntity(KakaoProfileDto.class);
+        System.out.println("kakao profile 응답 JSON : " + response.getBody());
+        return response.getBody();
     }
 }

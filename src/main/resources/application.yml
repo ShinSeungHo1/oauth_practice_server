@@ -24,3 +24,6 @@ oauth:
     client-id: 23640695977-gtrcdkhuv1as8fn0jie882lc5f05cjbp.apps.googleusercontent.com
     client-secret: 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
     redirect-uri: http://localhost:3000/oauth/google/redirect
+  kakao:
+    client-id: cd49fea59579e339d4a3dcea0f70dc8f
+    redirect-uri: http://localhost:3000/oauth/kakao/redirect
